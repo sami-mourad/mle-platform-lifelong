@@ -2,10 +2,12 @@ from mle_platform.release.promotion_policy import MetricRequirement, PromotionPo
 
 
 def test_promotion_policy_pass_and_fail() -> None:
-    policy = PromotionPolicy([
-        MetricRequirement("validation_f1", minimum=0.60, maximum_regression=0.05),
-        MetricRequirement("validation_brier_score", maximum=0.25),
-    ])
+    policy = PromotionPolicy(
+        [
+            MetricRequirement("validation_f1", minimum=0.60, maximum_regression=0.05),
+            MetricRequirement("validation_brier_score", maximum=0.25),
+        ]
+    )
     approved = policy.evaluate(
         candidate_metrics={"validation_f1": 0.70, "validation_brier_score": 0.18},
         incumbent_metrics={"validation_f1": 0.72},
@@ -21,13 +23,15 @@ def test_promotion_policy_pass_and_fail() -> None:
 
 
 def test_lower_is_better_regression_is_direction_aware() -> None:
-    policy = PromotionPolicy([
-        MetricRequirement(
-            "validation_brier_score",
-            maximum=0.30,
-            maximum_regression=0.02,
-        )
-    ])
+    policy = PromotionPolicy(
+        [
+            MetricRequirement(
+                "validation_brier_score",
+                maximum=0.30,
+                maximum_regression=0.02,
+            )
+        ]
+    )
     rejected = policy.evaluate(
         candidate_metrics={"validation_brier_score": 0.24},
         incumbent_metrics={"validation_brier_score": 0.20},
@@ -37,9 +41,9 @@ def test_lower_is_better_regression_is_direction_aware() -> None:
 
 
 def test_regression_gate_requires_incumbent_evidence() -> None:
-    policy = PromotionPolicy([
-        MetricRequirement("validation_f1", minimum=0.5, maximum_regression=0.05)
-    ])
+    policy = PromotionPolicy(
+        [MetricRequirement("validation_f1", minimum=0.5, maximum_regression=0.05)]
+    )
     decision = policy.evaluate(candidate_metrics={"validation_f1": 0.8})
     assert not decision.approved
     assert "missing incumbent" in decision.reasons[0]

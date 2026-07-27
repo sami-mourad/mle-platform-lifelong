@@ -71,13 +71,11 @@ class PromotionPolicy:
             evaluated[requirement.name] = value
             if requirement.minimum is not None and value < requirement.minimum:
                 reasons.append(
-                    f"{requirement.name}={value:.6g} is below minimum "
-                    f"{requirement.minimum:.6g}"
+                    f"{requirement.name}={value:.6g} is below minimum {requirement.minimum:.6g}"
                 )
             if requirement.maximum is not None and value > requirement.maximum:
                 reasons.append(
-                    f"{requirement.name}={value:.6g} exceeds maximum "
-                    f"{requirement.maximum:.6g}"
+                    f"{requirement.name}={value:.6g} exceeds maximum {requirement.maximum:.6g}"
                 )
             if requirement.maximum_regression is not None:
                 if requirement.name not in incumbent_metrics:

@@ -48,15 +48,9 @@ def labels(
         rows.append(
             {
                 "sample_id": row["sample_id"],
-                "label_value": (
-                    "Reported"
-                    if row["fraud_probability"] >= 0.55
-                    else "Dismissed"
-                ),
+                "label_value": ("Reported" if row["fraud_probability"] >= 0.55 else "Dismissed"),
                 "label_available_timestamp": (
-                    cutoff - timedelta(hours=1)
-                    if mature
-                    else cutoff + timedelta(days=1)
+                    cutoff - timedelta(hours=1) if mature else cutoff + timedelta(days=1)
                 ),
             }
         )
@@ -74,9 +68,7 @@ def test_monitoring_reports_pending_labels_and_persists_observation(
             minimum_current_rows=20,
             minimum_matured_fraction=0.5,
         ),
-        observation_store=JsonMonitoringObservationStore(
-            tmp_path / "observations"
-        ),
+        observation_store=JsonMonitoringObservationStore(tmp_path / "observations"),
     )
     observation = service.run(
         reference_predictions=reference,

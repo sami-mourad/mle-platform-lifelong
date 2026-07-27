@@ -33,9 +33,7 @@ class SynthAMLFeatureContract:
             "entity_join_key": self.entity_join_key,
             "event_timestamp_column": self.event_timestamp_column,
         }
-        blank = [
-            name for name, value in required_names.items() if not value.strip()
-        ]
+        blank = [name for name, value in required_names.items() if not value.strip()]
         if blank:
             raise ValueError(f"contract fields cannot be blank: {sorted(blank)}")
         if not self.feature_columns:
@@ -72,10 +70,7 @@ class SynthAMLFeatureContract:
                 payload.get("event_timestamp_column", "evaluation_timestamp")
             ),
             feature_columns=tuple(str(value) for value in feature_columns_value),
-            feature_dtypes={
-                str(key): str(value)
-                for key, value in feature_dtypes_value.items()
-            },
+            feature_dtypes={str(key): str(value) for key, value in feature_dtypes_value.items()},
         )
 
     @classmethod

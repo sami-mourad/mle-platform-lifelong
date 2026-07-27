@@ -143,11 +143,7 @@ class EvidentlyMonitoringAdapter:
         payload: Any = json.loads(path.read_text())
         value = _find_metric_value(payload, "DriftedColumnsCount")
         if value is None:
-            top_level = (
-                sorted(payload)
-                if isinstance(payload, dict)
-                else [type(payload).__name__]
-            )
+            top_level = sorted(payload) if isinstance(payload, dict) else [type(payload).__name__]
             raise ValueError(
                 "Evidently drift report does not expose a supported "
                 "DriftedColumnsCount encoding: "

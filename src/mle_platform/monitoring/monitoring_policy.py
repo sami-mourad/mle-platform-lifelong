@@ -34,9 +34,7 @@ class MonitoringPolicy:
             )
         reasons: list[str] = []
         drift_fraction = (
-            drifted_feature_count / monitored_feature_count
-            if monitored_feature_count
-            else 1.0
+            drifted_feature_count / monitored_feature_count if monitored_feature_count else 1.0
         )
         if drift_fraction > self.maximum_drifted_feature_fraction:
             reasons.append(f"drifted feature fraction is {drift_fraction:.3f}")

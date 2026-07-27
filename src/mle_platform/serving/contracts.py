@@ -34,9 +34,7 @@ class ScoreResponse(BaseModel):
     request_id: str = Field(min_length=1)
     entity_id: int | str
     evaluation_timestamp: datetime
-    prediction_timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    prediction_timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     status: ServingStatus
     release_id: str | None = None
     model_version: int | None = Field(default=None, ge=1)
@@ -49,9 +47,7 @@ class ScoreResponse(BaseModel):
     @model_validator(mode="after")
     def validate_status(self) -> ScoreResponse:
         if self.prediction_timestamp < self.evaluation_timestamp:
-            raise ValueError(
-                "prediction_timestamp cannot precede evaluation_timestamp"
-            )
+            raise ValueError("prediction_timestamp cannot precede evaluation_timestamp")
         if self.status is ServingStatus.SCORED:
             probability = self.fraud_probability
             threshold = self.decision_threshold
@@ -64,14 +60,10 @@ class ScoreResponse(BaseModel):
                 or threshold is None
                 or predicted_positive is None
             ):
-                raise ValueError(
-                    "scored responses require complete release and decision identity"
-                )
+                raise ValueError("scored responses require complete release and decision identity")
             expected = probability >= threshold
             if predicted_positive is not expected:
-                raise ValueError(
-                    "predicted_positive must match release threshold"
-                )
+                raise ValueError("predicted_positive must match release threshold")
             if self.reason is not None:
                 raise ValueError("scored responses cannot include a failure reason")
         elif not self.reason:

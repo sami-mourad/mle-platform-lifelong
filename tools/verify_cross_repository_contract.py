@@ -42,9 +42,7 @@ def main() -> None:
     parser.add_argument(
         "--feature-contract",
         type=Path,
-        default=Path(
-            "contracts/synthaml/feature_contract_v3_1_1.json"
-        ),
+        default=Path("contracts/synthaml/feature_contract_v3_1_1.json"),
     )
     parser.add_argument("--feature-snapshot", type=Path)
     args = parser.parse_args()
@@ -97,19 +95,16 @@ def main() -> None:
             )
 
             model_contract = SynthAMLFeatureContract.read_json(contract_path)
-            snapshot = TemporalMLEProjectAdapter(
-                model_contract
-            ).load_feature_snapshot(snapshot_path)
+            snapshot = TemporalMLEProjectAdapter(model_contract).load_feature_snapshot(
+                snapshot_path
+            )
             snapshot_summary = {
                 "path": str(snapshot_path),
                 "row_count": len(snapshot),
                 "feature_count": len(model_contract.feature_columns),
                 "feature_columns": list(model_contract.feature_columns),
                 "feature_schema_versions": sorted(
-                    snapshot["feature_schema_version"]
-                    .astype(str)
-                    .unique()
-                    .tolist()
+                    snapshot["feature_schema_version"].astype(str).unique().tolist()
                 ),
             }
 

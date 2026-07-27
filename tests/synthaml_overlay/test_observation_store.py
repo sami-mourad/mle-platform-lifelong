@@ -10,9 +10,7 @@ from mle_platform.monitoring.observation_store import JsonMonitoringObservationS
 def test_observations_are_safe_and_immutable(tmp_path: Path) -> None:
     store = JsonMonitoringObservationStore(tmp_path)
     first = store.write(observation_id="obs-1", payload={"decision": "healthy"})
-    assert store.write(
-        observation_id="obs-1", payload={"decision": "healthy"}
-    ) == first
+    assert store.write(observation_id="obs-1", payload={"decision": "healthy"}) == first
     with pytest.raises(ValueError, match="different"):
         store.write(observation_id="obs-1", payload={"decision": "investigate"})
     with pytest.raises(ValueError, match="filename-safe"):

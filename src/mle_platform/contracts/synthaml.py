@@ -57,9 +57,7 @@ class TrainingDatasetManifest(_ContractModel):
 
 class ModelReleaseManifest(_ContractModel):
     release_id: str
-    created_timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     registered_model_name: str
     model_version: int = Field(ge=1)
     mlflow_run_id: str
@@ -83,13 +81,8 @@ class ModelReleaseManifest(_ContractModel):
 
     @model_validator(mode="after")
     def validate_release_identity(self) -> ModelReleaseManifest:
-        if (
-            self.feature_schema_version
-            != self.training_dataset_manifest.feature_schema_version
-        ):
-            raise ValueError(
-                "release feature_schema_version must match the training dataset"
-            )
+        if self.feature_schema_version != self.training_dataset_manifest.feature_schema_version:
+            raise ValueError("release feature_schema_version must match the training dataset")
         return self
 
 

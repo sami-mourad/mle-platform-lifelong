@@ -73,9 +73,7 @@ def feature_snapshot(contract: SynthAMLFeatureContract) -> pd.DataFrame:
     return pd.DataFrame(
         {
             contract.entity_join_key: [930],
-            contract.event_timestamp_column: [
-                datetime(2025, 1, 31, 12, tzinfo=UTC)
-            ],
+            contract.event_timestamp_column: [datetime(2025, 1, 31, 12, tzinfo=UTC)],
             "feature_schema_version": [contract.feature_schema_version],
             "transaction_count": [7.0],
             "absolute_transaction_amount_flow": [125.0],
@@ -150,17 +148,13 @@ def run(
     scored = application.score(
         ScoreRequest(
             entity_id=930,
-            evaluation_timestamp=snapshot.loc[
-                0, contract.event_timestamp_column
-            ],
+            evaluation_timestamp=snapshot.loc[0, contract.event_timestamp_column],
             expected_feature_schema_version=contract.feature_schema_version,
         )
     )
 
     incomplete_values = {
-        name: value
-        for name, value in values.items()
-        if name != contract.feature_columns[-1]
+        name: value for name, value in values.items() if name != contract.feature_columns[-1]
     }
     broken = SynthAMLServingApplication(
         manifests=manifests,
@@ -176,9 +170,7 @@ def run(
     ).score(
         ScoreRequest(
             entity_id=930,
-            evaluation_timestamp=snapshot.loc[
-                0, contract.event_timestamp_column
-            ],
+            evaluation_timestamp=snapshot.loc[0, contract.event_timestamp_column],
         )
     )
 

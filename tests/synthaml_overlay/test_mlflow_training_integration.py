@@ -83,10 +83,7 @@ def test_training_promotion_and_active_release(tmp_path: Path) -> None:
         decision_threshold=0.5,
     )
     assert decision.approved
-    assert (
-        manifests.load_active().release_id
-        == result.release_manifest.release_id
-    )
+    assert manifests.load_active().release_id == result.release_manifest.release_id
     assert (
         registry.model_version(
             model_name="overlay-test-model",

@@ -39,7 +39,5 @@ SYNTHAML_ASSETS = [
 ]
 
 definitions = (
-    _DagsterDefinitions(assets=SYNTHAML_ASSETS)
-    if _DagsterDefinitions is not None
-    else None
+    _DagsterDefinitions(assets=SYNTHAML_ASSETS) if _DagsterDefinitions is not None else None
 )

@@ -56,9 +56,7 @@ class SynthAMLMonitoringService:
             reference_id="approved_reference_population",
         )
         summary = DelayedLabelPopulationBuilder.summary(current)
-        drifted_feature_count = self.evidently.drifted_feature_count(
-            reports["drift_json"]
-        )
+        drifted_feature_count = self.evidently.drifted_feature_count(reports["drift_json"])
         decision, reasons = self.policy.evaluate(
             current_row_count=len(current),
             drifted_feature_count=drifted_feature_count,

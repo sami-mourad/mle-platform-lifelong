@@ -101,9 +101,7 @@ def test_feast_historical_materialization_and_online_parity(
     )
     historical_frame = pl.from_arrow(historical).sort("AlertID")
     count_name = next(
-        column
-        for column in historical_frame.columns
-        if column.endswith("__transaction_count")
+        column for column in historical_frame.columns if column.endswith("__transaction_count")
     )
     assert historical_frame[count_name].to_list() == [2.0, 5.0]
 

@@ -59,10 +59,7 @@ def main() -> None:
         weighted_b = weight * sb / 5.0
         total_a += weighted_a
         total_b += weighted_b
-        print(
-            f"| {name} | {weight:.0f} | {sa:.1f} | {sb:.1f} | "
-            f"{sb - sa:+.1f} |"
-        )
+        print(f"| {name} | {weight:.0f} | {sa:.1f} | {sb:.1f} | {sb - sa:+.1f} |")
     print(
         f"| **Total** | **{total_weight:.0f}** | **{total_a:.1f}** | "
         f"**{total_b:.1f}** | **{total_b - total_a:+.1f}** |"

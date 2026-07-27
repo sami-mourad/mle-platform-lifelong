@@ -55,12 +55,9 @@ class SynthAMLServingApplication:
             manifest = self.manifests.load_active()
             if (
                 request.expected_feature_schema_version is not None
-                and request.expected_feature_schema_version
-                != manifest.feature_schema_version
+                and request.expected_feature_schema_version != manifest.feature_schema_version
             ):
-                raise FeatureContractViolation(
-                    "requested feature schema is not active"
-                )
+                raise FeatureContractViolation("requested feature schema is not active")
             vector = self.features.retrieve(entity_id=request.entity_id)
             if vector.feature_schema_version != manifest.feature_schema_version:
                 raise FeatureContractViolation(

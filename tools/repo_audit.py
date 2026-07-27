@@ -71,10 +71,19 @@ def audit(root: Path) -> list[Check]:
 
     python_files = list((root / "src").rglob("*.py")) if (root / "src").exists() else []
     typed = sum("->" in path.read_text(errors="ignore") for path in python_files)
-    checks.append(Check("type_hints", typed >= max(1, len(python_files) // 2), f"typed_files={typed}/{len(python_files)}", 8))
+    checks.append(
+        Check(
+            "type_hints",
+            typed >= max(1, len(python_files) // 2),
+            f"typed_files={typed}/{len(python_files)}",
+            8,
+        )
+    )
 
     collisions = module_package_collisions(root)
-    checks.append(Check("no_module_package_collisions", not collisions, f"collisions={collisions}", 10))
+    checks.append(
+        Check("no_module_package_collisions", not collisions, f"collisions={collisions}", 10)
+    )
 
     large_files = [
         str(path.relative_to(root))
@@ -102,7 +111,12 @@ def main() -> None:
     checks = audit(args.root.resolve())
     possible = sum(check.weight for check in checks)
     achieved = sum(check.weight for check in checks if check.passed)
-    payload = {"score": achieved, "possible": possible, "passes": achieved == possible, "checks": [asdict(c) for c in checks]}
+    payload = {
+        "score": achieved,
+        "possible": possible,
+        "passes": achieved == possible,
+        "checks": [asdict(c) for c in checks],
+    }
     if args.format == "json":
         print(json.dumps(payload, indent=2))
     else:
@@ -110,7 +124,9 @@ def main() -> None:
         print("| Check | Result | Weight | Evidence |")
         print("|---|---:|---:|---|")
         for check in checks:
-            print(f"| {check.name} | {'PASS' if check.passed else 'FAIL'} | {check.weight} | {check.evidence} |")
+            print(
+                f"| {check.name} | {'PASS' if check.passed else 'FAIL'} | {check.weight} | {check.evidence} |"
+            )
     raise SystemExit(0 if payload["passes"] else 1)
 
 

@@ -60,9 +60,7 @@ class TemporalMLEProjectAdapter:
             and not pd.api.types.is_bool_dtype(model_features[column])
         ]
         if unsupported:
-            raise ValueError(
-                f"model-facing features must be numeric or bool: {unsupported}"
-            )
+            raise ValueError(f"model-facing features must be numeric or bool: {unsupported}")
         return frame
 
     def training_table(
@@ -90,9 +88,7 @@ class TemporalMLEProjectAdapter:
             )
             cutoff = pd.Timestamp(maturity_cutoff)
             cutoff = (
-                cutoff.tz_localize("UTC")
-                if cutoff.tzinfo is None
-                else cutoff.tz_convert("UTC")
+                cutoff.tz_localize("UTC") if cutoff.tzinfo is None else cutoff.tz_convert("UTC")
             )
             table = table.loc[timestamps <= cutoff].copy()
         if table.empty:

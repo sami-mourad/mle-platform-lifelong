@@ -33,9 +33,7 @@ def build_default_application() -> SynthAMLServingApplication:
             "contracts/synthaml/feature_contract_v3_1_1.json",
         )
     )
-    feature_store = FeastFeatureStoreAdapter(
-        os.environ.get("SYNTHAML_FEAST_REPO", "feature_repo")
-    )
+    feature_store = FeastFeatureStoreAdapter(os.environ.get("SYNTHAML_FEAST_REPO", "feature_repo"))
     return SynthAMLServingApplication(
         manifests=AtomicReleaseManifestRepository(
             os.environ.get(
@@ -61,9 +59,7 @@ def build_default_application() -> SynthAMLServingApplication:
 
 
 def create_app(
-    application_factory: Callable[
-        [], SynthAMLServingApplication
-    ] = build_default_application,
+    application_factory: Callable[[], SynthAMLServingApplication] = build_default_application,
 ) -> FastAPI:
     state = _ServiceState()
 

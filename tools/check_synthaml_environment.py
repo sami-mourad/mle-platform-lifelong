@@ -47,7 +47,11 @@ def main() -> None:
     parser.add_argument("--profile", choices=[*MODULES, "all"], default="core")
     parser.add_argument("--repository-1", type=Path)
     args = parser.parse_args()
-    names = sorted({name for profile in MODULES.values() for name in profile}) if args.profile == "all" else list(MODULES[args.profile])
+    names = (
+        sorted({name for profile in MODULES.values() for name in profile})
+        if args.profile == "all"
+        else list(MODULES[args.profile])
+    )
     results: dict[str, dict[str, object]] = {}
     missing: list[str] = []
     for name in names:
