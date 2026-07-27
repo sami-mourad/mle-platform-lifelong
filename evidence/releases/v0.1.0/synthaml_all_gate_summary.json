@@ -1,0 +1,191 @@
+{
+  "completed_gate_count": 14,
+  "generated_at": "2026-07-27T18:29:11.925868+00:00",
+  "passes": true,
+  "planned_gate_count": 14,
+  "profile": "all",
+  "results": [
+    {
+      "command": [
+        "python",
+        "tools/check_synthaml_environment.py",
+        "--profile",
+        "core"
+      ],
+      "log_path": "evidence/releases/v0.1.0/00_environment_core.txt",
+      "name": "00_environment_core",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "compileall",
+        "-q",
+        "src",
+        "examples",
+        "tests",
+        "tools"
+      ],
+      "log_path": "evidence/releases/v0.1.0/01_compile.txt",
+      "name": "01_compile",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "tools/verify_synthaml_overlay.py"
+      ],
+      "log_path": "evidence/releases/v0.1.0/02_overlay_verify.txt",
+      "name": "02_overlay_verify",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "tools/repo_audit.py",
+        ".",
+        "--format",
+        "json"
+      ],
+      "log_path": "evidence/releases/v0.1.0/03_repository_audit.txt",
+      "name": "03_repository_audit",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-ra",
+        "tests/unit",
+        "tests/contract",
+        "tests/integration",
+        "tests/synthaml_overlay/test_evidently_drift_count.py",
+        "tests/synthaml_overlay/test_fastapi_service.py",
+        "tests/synthaml_overlay/test_feature_contract.py",
+        "tests/synthaml_overlay/test_feature_retrieval.py",
+        "tests/synthaml_overlay/test_hosting_thin_slice.py",
+        "tests/synthaml_overlay/test_monitoring_policy.py",
+        "tests/synthaml_overlay/test_observation_store.py",
+        "tests/synthaml_overlay/test_orchestration_boundaries.py",
+        "tests/synthaml_overlay/test_promotion_policy.py",
+        "tests/synthaml_overlay/test_release_manifest.py",
+        "tests/synthaml_overlay/test_release_controller.py",
+        "tests/synthaml_overlay/test_serving_application.py"
+      ],
+      "log_path": "evidence/releases/v0.1.0/04_core_tests.txt",
+      "name": "04_core_tests",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/synthaml_hosting_thin_slice.py",
+        "--output-directory",
+        "evidence/releases/v0.1.0/thin_slice_artifacts"
+      ],
+      "log_path": "evidence/releases/v0.1.0/05_hosting_thin_slice.txt",
+      "name": "05_hosting_thin_slice",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "tools/check_synthaml_environment.py",
+        "--profile",
+        "bridge",
+        "--repository-1",
+        "../temporal-mle-data-contract"
+      ],
+      "log_path": "evidence/releases/v0.1.0/10_environment_bridge.txt",
+      "name": "10_environment_bridge",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "tools/verify_cross_repository_contract.py",
+        "--repository-1",
+        "../temporal-mle-data-contract",
+        "--feature-snapshot",
+        "../temporal-mle-data-contract/data/demo/end_to_end_8/13_final_feature_snapshot_table.parquet"
+      ],
+      "log_path": "evidence/releases/v0.1.0/11_cross_repository_contract.txt",
+      "name": "11_cross_repository_contract",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "tools/check_synthaml_environment.py",
+        "--profile",
+        "sdk",
+        "--repository-1",
+        "../temporal-mle-data-contract"
+      ],
+      "log_path": "evidence/releases/v0.1.0/20_environment_sdk.txt",
+      "name": "20_environment_sdk",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-ra",
+        "tests/synthaml_overlay/test_feast_adapter_integration.py"
+      ],
+      "log_path": "evidence/releases/v0.1.0/21_feast_boundary.txt",
+      "name": "21_feast_boundary",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-ra",
+        "tests/synthaml_overlay/test_mlflow_training_integration.py"
+      ],
+      "log_path": "evidence/releases/v0.1.0/22_mlflow_boundary.txt",
+      "name": "22_mlflow_boundary",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-ra",
+        "tests/synthaml_overlay/test_bentoml_runtime_integration.py"
+      ],
+      "log_path": "evidence/releases/v0.1.0/23_bentoml_boundary.txt",
+      "name": "23_bentoml_boundary",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-ra",
+        "tests/synthaml_overlay/test_monitoring_integration.py"
+      ],
+      "log_path": "evidence/releases/v0.1.0/24_evidently_boundary.txt",
+      "name": "24_evidently_boundary",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python",
+        "examples/synthaml_platform_overlay_demo.py",
+        "--output-directory",
+        "evidence/releases/v0.1.0/sdk_synthetic_release"
+      ],
+      "log_path": "evidence/releases/v0.1.0/25_sdk_release_demo.txt",
+      "name": "25_sdk_release_demo",
+      "returncode": 0
+    }
+  ]
+}
