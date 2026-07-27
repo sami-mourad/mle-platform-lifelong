@@ -1,0 +1,58 @@
+repository: replace-me
+reviewer: replace-me
+commit: replace-with-immutable-commit-sha
+review_date: YYYY-MM-DD
+hard_gates:
+  clean_checkout_runs: false
+  no_secrets_committed: false
+  deterministic_test_path: false
+  documented_data_license: false
+  fallback_exercised: false
+  rollback_or_last_known_good: false
+categories:
+  - name: architecture_and_boundaries
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: reproducibility_and_developer_experience
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: data_contracts_and_leakage_control
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: modeling_and_evaluation
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: registry_and_lifecycle
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: serving_fallback_and_rollback
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: orchestration_idempotency_and_backfills
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: infrastructure_security_and_operability
+    weight: 15
+    score: 0
+    evidence: ""
+  - name: code_quality_and_testability
+    weight: 10
+    score: 0
+    evidence: ""
+  - name: documentation_and_extensibility
+    weight: 5
+    score: 0
+    evidence: ""
+merge_notes:
+  strongest_capabilities: []
+  weakest_capabilities: []
+  reusable_modules: []
+  concepts_to_reimplement_not_copy: []
+  incompatible_assumptions: []

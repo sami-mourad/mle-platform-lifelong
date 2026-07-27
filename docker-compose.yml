@@ -1,0 +1,211 @@
+name: mle-platform-lifelong
+
+x-app-env: &app-env
+  APP_ENV: ${APP_ENV:-dev}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  DATA_DIR: ${DATA_DIR:-/app/.data}
+  ARTIFACT_DIR: ${ARTIFACT_DIR:-/app/.artifacts}
+  MODEL_REFRESH_SECONDS: ${MODEL_REFRESH_SECONDS:-5}
+  MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI:-http://mlflow:5000}
+  MLFLOW_EXPERIMENT_NAME: ${MLFLOW_EXPERIMENT_NAME:-dummy-imbalance}
+  MLFLOW_REGISTER_MODELS: ${MLFLOW_REGISTER_MODELS:-true}
+  MLFLOW_MODEL_NAME: ${MLFLOW_MODEL_NAME:-dummy_imbalance_risk}
+  MLFLOW_S3_ENDPOINT_URL: ${MLFLOW_S3_ENDPOINT_URL:-http://minio:9000}
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-minio123}
+  AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-us-east-1}
+  REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+  DAGSTER_HOME: /app/infra/docker/dagster
+  DAGSTER_POSTGRES_HOST: postgres
+  DAGSTER_POSTGRES_PORT: 5432
+  DAGSTER_POSTGRES_USER: ${POSTGRES_USER:-mle}
+  DAGSTER_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mle}
+  DAGSTER_POSTGRES_DB: ${DAGSTER_DB:-dagster}
+  ALLOW_DEV_FORCE_FALLBACK: ${ALLOW_DEV_FORCE_FALLBACK:-true}
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mle}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mle}
+      POSTGRES_DB: postgres
+      MLFLOW_DB: ${MLFLOW_DB:-mlflow}
+      DAGSTER_DB: ${DAGSTER_DB:-dagster}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/docker/postgres/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mle} -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:RELEASE.2025-10-15T17-29-55Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio123}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+  minio-init:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-minio} ${MINIO_ROOT_PASSWORD:-minio123}; do sleep 2; done;
+      mc mb --ignore-existing local/${MLFLOW_ARTIFACT_BUCKET:-mlflow};
+      mc anonymous set none local/${MLFLOW_ARTIFACT_BUCKET:-mlflow};
+      exit 0;"
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    command:
+      - /bin/bash
+      - -lc
+      - >
+        mlflow server
+        --host 0.0.0.0
+        --port 5000
+        --backend-store-uri postgresql+psycopg://${POSTGRES_USER:-mle}:${POSTGRES_PASSWORD:-mle}@postgres:5432/${MLFLOW_DB:-mlflow}
+        --artifacts-destination s3://${MLFLOW_ARTIFACT_BUCKET:-mlflow}
+    environment:
+      <<: *app-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  dagster-user-code:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    command: ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "mle_platform.orchestration.definitions"]
+    environment:
+      <<: *app-env
+    volumes:
+      - model_artifacts:/app/.artifacts
+      - dataset_cache:/app/.data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+
+  dagster-webserver:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    command: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "-w", "/app/infra/docker/dagster/workspace.yaml"]
+    environment:
+      <<: *app-env
+    volumes:
+      - ./infra/docker/dagster/workspace.yaml:/app/infra/docker/dagster/workspace.yaml:ro
+    depends_on:
+      - dagster-user-code
+    ports:
+      - "3000:3000"
+
+  dagster-daemon:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    command: ["dagster-daemon", "run"]
+    environment:
+      <<: *app-env
+    volumes:
+      - ./infra/docker/dagster/workspace.yaml:/app/infra/docker/dagster/workspace.yaml:ro
+    depends_on:
+      - dagster-user-code
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    command: ["python", "-m", "mle_platform.projects.dummy_imbalance.service"]
+    environment:
+      <<: *app-env
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+    volumes:
+      - model_artifacts:/app/.artifacts:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  prometheus:
+    image: prom/prometheus:v3.12.0
+    profiles: ["observability"]
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ./infra/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - api
+
+  grafana:
+    image: grafana/grafana:12.2.0
+    profiles: ["observability"]
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  postgres_data:
+  minio_data:
+  redis_data:
+  model_artifacts:
+  dataset_cache:
+  prometheus_data:
+  grafana_data:

@@ -1,0 +1,32 @@
+services:
+  api-synthaml:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    command: ["python", "-m", "mle_platform.projects.synthaml.service"]
+    environment:
+      API_HOST: 0.0.0.0
+      API_PORT: 8001
+      SYNTHAML_FEATURE_CONTRACT_PATH: /app/contracts/synthaml/feature_contract_v3_1_1.json
+      SYNTHAML_FEAST_REPO: /app/feature_repo
+      SYNTHAML_RELEASE_DIR: /app/.artifacts/releases/synthaml
+      SYNTHAML_PREDICTION_LOG: /app/.artifacts/predictions/synthaml.jsonl
+      REDIS_URL: redis://redis:6379/0
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      BENTOML_HOME: /app/.artifacts/bentoml
+    volumes:
+      - model_artifacts:/app/.artifacts
+      - ./contracts:/app/contracts:ro
+      - ./feature_repo:/app/feature_repo:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health/live')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30

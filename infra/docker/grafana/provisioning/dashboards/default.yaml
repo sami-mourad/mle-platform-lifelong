@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: MLE Platform
+    folder: MLE Platform
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards
