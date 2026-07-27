@@ -48,7 +48,7 @@ Documentation = "https://github.com/sami-mourad/mle-platform-lifelong/tree/main/
 [project.optional-dependencies]
 dev = [
   "httpx>=0.28,<1",
-  "mypy>=1.18,<2",
+  "mypy>=1.18,<3",
   "pre-commit>=4.3,<5",
   "pytest>=8.4,<10",
   "pytest-cov>=7,<8",
