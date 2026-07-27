@@ -56,7 +56,7 @@ dev = [
   "types-pyyaml>=6.0,<7",
 ]
 synthaml-core = [
-  "pyarrow>=20,<25",
+  "pyarrow>=20,<26",
 ]
 synthaml-sdk = [
   "bentoml>=1.4,<2",
@@ -65,7 +65,7 @@ synthaml-sdk = [
   "feast>=0.64,<0.65",
   "mlflow>=3.14,<4",
   "polars>=1.42,<2",
-  "pyarrow>=20,<25",
+  "pyarrow>=20,<26",
 ]
 orchestration = [
   "dagster>=1.13,<2",
@@ -89,7 +89,7 @@ full-platform = [
   "mlflow>=3.14,<4",
   "polars>=1.42,<2",
   "psycopg[binary]>=3.2,<4",
-  "pyarrow>=20,<25",
+  "pyarrow>=20,<26",
   "redis>=7,<9",
 ]
 
