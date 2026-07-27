@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the repository release."
+title: "Contract-First MLE Platform for SynthAML"
+type: software
+authors:
+  - family-names: Mourad
+    given-names: Sami
+repository-code: "https://github.com/sami-mourad/mle-platform-lifelong"
+url: "https://github.com/sami-mourad/mle-platform-lifelong"
+license: MIT
+version: 0.1.0
+date-released: 2026-07-26
