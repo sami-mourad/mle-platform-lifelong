@@ -1,0 +1,78 @@
+{
+  "$defs": {
+    "FinalOutcome": {
+      "description": "Canonical binary outcome vocabulary.",
+      "enum": [
+        "Reported",
+        "Dismissed"
+      ],
+      "title": "FinalOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One independently arriving supervision event.",
+  "properties": {
+    "entity_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Entity Id"
+    },
+    "label_value": {
+      "$ref": "#/$defs/FinalOutcome"
+    },
+    "label_available_timestamp": {
+      "format": "date-time",
+      "title": "Label Available Timestamp",
+      "type": "string"
+    },
+    "alert_raised_timestamp": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Alert Raised Timestamp"
+    },
+    "label_source": {
+      "default": "simulated",
+      "title": "Label Source",
+      "type": "string"
+    },
+    "label_availability_policy_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Label Availability Policy Version"
+    },
+    "label_delay_is_simulated": {
+      "default": true,
+      "title": "Label Delay Is Simulated",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "entity_id",
+    "label_value",
+    "label_available_timestamp"
+  ],
+  "title": "LabelEventContract",
+  "type": "object"
+}

@@ -1,0 +1,18 @@
+project:
+  name: dummy_imbalance
+  seed: 42
+  test_size: 0.20
+  validation_size: 0.20
+  false_negative_cost: 25.0
+  false_positive_cost: 1.0
+  minimum_recall: 0.80
+  maximum_threshold_candidates: 500
+
+training:
+  experiment_name: dummy-imbalance
+  registered_model_name: dummy_imbalance_risk
+
+serving:
+  positive_decision: review
+  negative_decision: clear
+  refresh_seconds: 5

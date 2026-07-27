@@ -1,0 +1,59 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Local application state and generated artifacts
+.data/
+.artifacts/
+.mlruns/
+mlruns/
+.dagster/
+logs/
+tmp/
+*.db
+*.sqlite
+
+# Generated release evidence: keep only sanitized summaries
+evidence/**/*.txt
+evidence/**/thin_slice_artifacts/
+evidence/**/sdk_synthetic_release/
+evidence/**/releases/history/
+evidence/**/predictions.jsonl
+
+# Infrastructure state
+.terraform/
+terraform.tfstate
+terraform.tfstate.*
+*.tfplan
+postgres-data/
+redis-data/
+minio-data/
+
+# Patch and editor debris
+*.orig
+*.rej
+*.patch
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

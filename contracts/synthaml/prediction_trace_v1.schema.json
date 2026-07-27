@@ -1,0 +1,79 @@
+{
+  "additionalProperties": false,
+  "description": "One serving observation with enough identity for delayed evaluation.",
+  "properties": {
+    "sample_id": {
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Entity Id"
+    },
+    "evaluation_timestamp": {
+      "format": "date-time",
+      "title": "Evaluation Timestamp",
+      "type": "string"
+    },
+    "prediction_timestamp": {
+      "format": "date-time",
+      "title": "Prediction Timestamp",
+      "type": "string"
+    },
+    "release_id": {
+      "title": "Release Id",
+      "type": "string"
+    },
+    "model_version": {
+      "minimum": 1,
+      "title": "Model Version",
+      "type": "integer"
+    },
+    "feature_schema_version": {
+      "title": "Feature Schema Version",
+      "type": "string"
+    },
+    "fraud_probability": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Fraud Probability",
+      "type": "number"
+    },
+    "decision_threshold": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Decision Threshold",
+      "type": "number"
+    },
+    "decision": {
+      "title": "Decision",
+      "type": "boolean"
+    },
+    "feature_values": {
+      "additionalProperties": true,
+      "title": "Feature Values",
+      "type": "object"
+    }
+  },
+  "required": [
+    "sample_id",
+    "entity_id",
+    "evaluation_timestamp",
+    "prediction_timestamp",
+    "release_id",
+    "model_version",
+    "feature_schema_version",
+    "fraud_probability",
+    "decision_threshold",
+    "decision"
+  ],
+  "title": "PredictionTraceContract",
+  "type": "object"
+}

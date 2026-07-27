@@ -1,0 +1,83 @@
+{
+  "additionalProperties": false,
+  "description": "Immutable prediction event emitted before supervision is available.",
+  "properties": {
+    "prediction_id": {
+      "minLength": 1,
+      "title": "Prediction Id",
+      "type": "string"
+    },
+    "sample_id": {
+      "minLength": 1,
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Entity Id"
+    },
+    "prediction_timestamp": {
+      "format": "date-time",
+      "title": "Prediction Timestamp",
+      "type": "string"
+    },
+    "evaluation_timestamp": {
+      "format": "date-time",
+      "title": "Evaluation Timestamp",
+      "type": "string"
+    },
+    "model_name": {
+      "minLength": 1,
+      "title": "Model Name",
+      "type": "string"
+    },
+    "model_version": {
+      "minLength": 1,
+      "title": "Model Version",
+      "type": "string"
+    },
+    "fraud_probability": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Fraud Probability",
+      "type": "number"
+    },
+    "decision_threshold": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Decision Threshold",
+      "type": "number"
+    },
+    "predicted_positive": {
+      "title": "Predicted Positive",
+      "type": "boolean"
+    },
+    "feature_schema_version": {
+      "minLength": 1,
+      "title": "Feature Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "prediction_id",
+    "sample_id",
+    "entity_id",
+    "prediction_timestamp",
+    "evaluation_timestamp",
+    "model_name",
+    "model_version",
+    "fraud_probability",
+    "decision_threshold",
+    "predicted_positive",
+    "feature_schema_version"
+  ],
+  "title": "PredictionEventContract",
+  "type": "object"
+}

@@ -1,0 +1,192 @@
+{
+  "$defs": {
+    "TrainingDatasetManifest": {
+      "additionalProperties": false,
+      "description": "Identity and integrity summary of the table used for supervised training.",
+      "properties": {
+        "dataset_uri": {
+          "title": "Dataset Uri",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 1,
+          "title": "Row Count",
+          "type": "integer"
+        },
+        "feature_count": {
+          "minimum": 1,
+          "title": "Feature Count",
+          "type": "integer"
+        },
+        "feature_columns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Feature Columns",
+          "type": "array"
+        },
+        "target_column": {
+          "title": "Target Column",
+          "type": "string"
+        },
+        "entity_column": {
+          "default": "AlertID",
+          "title": "Entity Column",
+          "type": "string"
+        },
+        "evaluation_timestamp_column": {
+          "default": "evaluation_timestamp",
+          "title": "Evaluation Timestamp Column",
+          "type": "string"
+        },
+        "feature_schema_version": {
+          "title": "Feature Schema Version",
+          "type": "string"
+        },
+        "split_policy": {
+          "title": "Split Policy",
+          "type": "string"
+        },
+        "label_maturity_cutoff": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label Maturity Cutoff"
+        },
+        "content_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Sha256"
+        }
+      },
+      "required": [
+        "dataset_uri",
+        "row_count",
+        "feature_count",
+        "feature_columns",
+        "target_column",
+        "feature_schema_version",
+        "split_policy"
+      ],
+      "title": "TrainingDatasetManifest",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Immutable handoff from training authority to serving authority.",
+  "properties": {
+    "release_id": {
+      "title": "Release Id",
+      "type": "string"
+    },
+    "created_timestamp": {
+      "format": "date-time",
+      "title": "Created Timestamp",
+      "type": "string"
+    },
+    "registered_model_name": {
+      "title": "Registered Model Name",
+      "type": "string"
+    },
+    "model_version": {
+      "minimum": 1,
+      "title": "Model Version",
+      "type": "integer"
+    },
+    "mlflow_run_id": {
+      "title": "Mlflow Run Id",
+      "type": "string"
+    },
+    "mlflow_model_uri": {
+      "title": "Mlflow Model Uri",
+      "type": "string"
+    },
+    "candidate_alias": {
+      "default": "candidate",
+      "title": "Candidate Alias",
+      "type": "string"
+    },
+    "champion_alias": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Champion Alias"
+    },
+    "feature_service_name": {
+      "title": "Feature Service Name",
+      "type": "string"
+    },
+    "feature_schema_version": {
+      "title": "Feature Schema Version",
+      "type": "string"
+    },
+    "decision_threshold": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Decision Threshold",
+      "type": "number"
+    },
+    "training_dataset_manifest": {
+      "$ref": "#/$defs/TrainingDatasetManifest"
+    },
+    "code_revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Code Revision"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "object"
+    }
+  },
+  "required": [
+    "release_id",
+    "registered_model_name",
+    "model_version",
+    "mlflow_run_id",
+    "mlflow_model_uri",
+    "feature_service_name",
+    "feature_schema_version",
+    "decision_threshold",
+    "training_dataset_manifest"
+  ],
+  "title": "ModelReleaseManifest",
+  "type": "object"
+}

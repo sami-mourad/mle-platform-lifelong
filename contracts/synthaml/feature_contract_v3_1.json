@@ -1,0 +1,20 @@
+{
+  "contract_version": "synthaml_model_feature_contract_v1_1",
+  "temporal_package_version": "3.1.1",
+  "feature_schema_version": "temporal_feature_schema_v3_1",
+  "feature_service_name": "aml_temporal_detection_service_v3_1",
+  "feature_view_name": "aml_temporal_detection_features_v3_1",
+  "entity_name": "aml_alert",
+  "entity_join_key": "AlertID",
+  "event_timestamp_column": "evaluation_timestamp",
+  "feature_columns": [
+    "transaction_count",
+    "absolute_transaction_amount_flow",
+    "interarrival_time_mean_seconds"
+  ],
+  "feature_dtypes": {
+    "transaction_count": "INT64",
+    "absolute_transaction_amount_flow": "FLOAT64",
+    "interarrival_time_mean_seconds": "FLOAT64"
+  }
+}

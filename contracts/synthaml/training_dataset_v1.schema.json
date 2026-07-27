@@ -1,0 +1,85 @@
+{
+  "additionalProperties": false,
+  "description": "Identity and integrity summary of the table used for supervised training.",
+  "properties": {
+    "dataset_uri": {
+      "title": "Dataset Uri",
+      "type": "string"
+    },
+    "row_count": {
+      "minimum": 1,
+      "title": "Row Count",
+      "type": "integer"
+    },
+    "feature_count": {
+      "minimum": 1,
+      "title": "Feature Count",
+      "type": "integer"
+    },
+    "feature_columns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Feature Columns",
+      "type": "array"
+    },
+    "target_column": {
+      "title": "Target Column",
+      "type": "string"
+    },
+    "entity_column": {
+      "default": "AlertID",
+      "title": "Entity Column",
+      "type": "string"
+    },
+    "evaluation_timestamp_column": {
+      "default": "evaluation_timestamp",
+      "title": "Evaluation Timestamp Column",
+      "type": "string"
+    },
+    "feature_schema_version": {
+      "title": "Feature Schema Version",
+      "type": "string"
+    },
+    "split_policy": {
+      "title": "Split Policy",
+      "type": "string"
+    },
+    "label_maturity_cutoff": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Label Maturity Cutoff"
+    },
+    "content_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Sha256"
+    }
+  },
+  "required": [
+    "dataset_uri",
+    "row_count",
+    "feature_count",
+    "feature_columns",
+    "target_column",
+    "feature_schema_version",
+    "split_policy"
+  ],
+  "title": "TrainingDatasetManifest",
+  "type": "object"
+}

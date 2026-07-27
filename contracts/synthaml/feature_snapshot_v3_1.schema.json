@@ -1,0 +1,94 @@
+{
+  "additionalProperties": false,
+  "description": "Versioned point-in-time feature payload stored offline or served online.",
+  "properties": {
+    "sample_id": {
+      "minLength": 1,
+      "title": "Sample Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Entity Id"
+    },
+    "evaluation_timestamp": {
+      "format": "date-time",
+      "title": "Evaluation Timestamp",
+      "type": "string"
+    },
+    "feature_service_name": {
+      "minLength": 1,
+      "title": "Feature Service Name",
+      "type": "string"
+    },
+    "feature_schema_version": {
+      "minLength": 1,
+      "title": "Feature Schema Version",
+      "type": "string"
+    },
+    "features": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "minProperties": 1,
+      "title": "Features",
+      "type": "object"
+    },
+    "event_anchor_timestamp": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Event Anchor Timestamp"
+    },
+    "created_timestamp": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created Timestamp"
+    }
+  },
+  "required": [
+    "sample_id",
+    "entity_id",
+    "evaluation_timestamp",
+    "feature_service_name",
+    "feature_schema_version",
+    "features"
+  ],
+  "title": "FeatureSnapshotContract",
+  "type": "object"
+}
