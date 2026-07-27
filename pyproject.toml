@@ -60,7 +60,7 @@ synthaml-core = [
 ]
 synthaml-sdk = [
   "bentoml>=1.4,<2",
-  "cryptography>=45,<48",
+  "cryptography>=45,<50",
   "evidently>=0.7,<0.8",
   "feast>=0.64,<0.65",
   "mlflow>=3.14,<4",
@@ -80,7 +80,7 @@ infra = [
 full-platform = [
   "bentoml>=1.4,<2",
   "boto3>=1.40,<2",
-  "cryptography>=45,<48",
+  "cryptography>=45,<50",
   "dagster>=1.13,<2",
   "dagster-postgres>=0.29,<1",
   "dagster-webserver>=1.13,<2",
