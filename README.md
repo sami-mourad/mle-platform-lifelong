@@ -8,9 +8,11 @@ A production-oriented local reference architecture for turning a point-in-time t
 
 This repository is the **model-lifecycle and hosting authority** for the companion [`temporal-mle-data-contract`](https://github.com/sami-mourad/temporal-mle-data-contract) project.
 
-## Release-candidate status
+## v0.1.1 validation status
 
-The minimum integration sequence passed locally before the initial Git import:
+The minimum integration sequence passes across all defined gates.
+Public source-quality and lifecycle checks run through GitHub Actions,
+and the committed release summary records the bounded integration evidence.
 
 | Boundary | Status |
 |---|---|
