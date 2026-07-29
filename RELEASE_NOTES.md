@@ -1,6 +1,15 @@
-# v0.1.0 — SynthAML Minimum Integration Release
+# v0.1.1 — Green CI and Optional Dagster Boundary
 
-This release establishes the first public, bounded integration of the temporal feature repository with the MLE hosting platform.
+Patch release of the bounded SynthAML minimum integration.
+
+This release preserves the v0.1.0 feature and lifecycle contracts while:
+
+- satisfying the public Ruff, formatting, mypy, and pytest gates;
+- making optional Dagster Definitions loading safe when Dagster is absent or
+  exposes an incompatible API; and
+- aligning the README validation status with the green main branch.
+
+No feature-schema, model-release-contract, or serving-policy change.
 
 ## Validated path
 
